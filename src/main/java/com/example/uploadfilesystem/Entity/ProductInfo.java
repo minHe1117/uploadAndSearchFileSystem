@@ -130,7 +130,7 @@ public class ProductInfo {
     @Column(name = "partially_promoted")
     private String partiallyPromoted;
 
-    @Column(name = "product_category")
+    @Column(name = "product_category", length = 65555)
     private String productCategory;
 
     @Column(name = "sort_order")

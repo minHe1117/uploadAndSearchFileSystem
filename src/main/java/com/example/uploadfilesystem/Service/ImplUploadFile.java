@@ -113,7 +113,10 @@ public class ImplUploadFile implements UpLoadFileService {
         String partiallyPromoted = record.getString("partially_promoted");
         String productCategory = record.getString("product_category");
         String sortOrder = record.getString("sort_order");
-        int quantitySold = record.getInt("quantity_sold");
+        int quantitySold = 0;
+        if(record.getInt("quantity_sold") != null){
+            record.getInt("quantity_sold");
+        }
 
         double averageRating = 0.0;
         if(record.getDouble("average_rating") != null ){
