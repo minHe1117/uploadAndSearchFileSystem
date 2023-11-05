@@ -37,8 +37,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public String deleteOrder(@PathVariable Long productId) {
-        String description = "Order Deleted";
+    public String deleteProduct(@PathVariable Long productId) {
+        String description = "Product Deleted";
         solrProductService.delete(solrProductService.findBySkuId(productId));
         return description;
     }

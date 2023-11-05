@@ -21,6 +21,11 @@ public class UpLoadController {
 
     @PostMapping("upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
-        return new ResponseEntity<>(upLoadFileService.uploadFile(file), HttpStatus.CREATED);
+        try{
+            return new ResponseEntity<>(upLoadFileService.uploadFile(file), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

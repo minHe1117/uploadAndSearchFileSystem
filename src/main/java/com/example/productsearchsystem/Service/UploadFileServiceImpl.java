@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ImplUploadFile implements UpLoadFileService {
+public class UploadFileServiceImpl implements UpLoadFileService {
 
     private ProductInfoRepository productInfoRepository;
 
@@ -24,7 +24,7 @@ public class ImplUploadFile implements UpLoadFileService {
 
     private CsvParser csvParser;
 
-    public ImplUploadFile(ProductInfoRepository productInfoRepository, CsvParser csvParser, SolrSearchService solrSearchService) {
+    public UploadFileServiceImpl(ProductInfoRepository productInfoRepository, CsvParser csvParser, SolrSearchService solrSearchService) {
         this.productInfoRepository = productInfoRepository;
         this.csvParser = csvParser;
         this.solrSearchService = solrSearchService;
@@ -57,13 +57,13 @@ public class ImplUploadFile implements UpLoadFileService {
         try {
             productInfoRepository.saveAll(newProductInfos);
         } catch (Exception e) {
-            System.err.println("Error save to DB: " + e.getMessage());
+            System.err.println("Error save to MySQL DB: " + e.getMessage());
         }
 
         try {
             this.solrSearchService.saveAll(getProducts(newProductInfos));
         } catch (Exception e) {
-            System.err.println("Error save to Solr : " + e.getMessage());
+            System.err.println("Error save to Solr Search: " + e.getMessage());
         }
 
         return "Upload file successful，total items: " + lineNumber;
