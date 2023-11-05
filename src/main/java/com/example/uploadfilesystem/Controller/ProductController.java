@@ -1,6 +1,5 @@
 package com.example.uploadfilesystem.Controller;
 
-import com.example.uploadfilesystem.Dao.SolrProductRepository;
 import com.example.uploadfilesystem.Entity.Product;
 import com.example.uploadfilesystem.Service.SolrSearchService;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,7 @@ public class ProductController {
     @PostMapping()
     public String createProduct(@RequestBody Product product) {
         String description = "Product Created";
-        Product saved = solrProductService.save(product);
+        solrProductService.save(product);
         return description;
     }
 

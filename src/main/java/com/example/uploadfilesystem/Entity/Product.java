@@ -4,11 +4,14 @@ package com.example.uploadfilesystem.Entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @SolrDocument(collection = "Product") //case sensitive
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Indexed(name = "skuId", type = "string")
     private String skuId;
 
