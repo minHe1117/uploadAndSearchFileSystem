@@ -1,167 +1,151 @@
 package com.example.uploadfilesystem.Entity;
 
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "product_info")
-public class ProductInfo {
-
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Long id;
+@SolrDocument(collection = "Product") //case sensitive
+public class Product {
 
     @Id
-    @Column(name = "sku_id")
+    @Indexed(name = "skuId", type = "string")
     private String skuId;
 
-    @Column(name = "image")
+    @Indexed(name = "image", type = "string")
     private String image;
 
-    @Column(name = "additional_image_link")
+    @Indexed(name = "additional_image_link", type = "string")
     private String additionalImageLink;
 
-    @Column(name = "style_id")
+    @Indexed(name = "style_id", type = "string")
     private String styleId;
 
-    @Column(name = "class_id")
+    @Indexed(name = "class_id", type = "string")
     private String classId;
 
-    @Column(name = "color")
+    @Indexed(name = "color", type = "string")
     private String color;
 
-    @Column(name = "color_code")
+    @Indexed(name = "color_code", type = "string")
     private String colorCode;
 
-    @Column(name = "color_family")
+    @Indexed(name = "color_family", type = "string")
     private String colorFamily;
 
-    @Column(name = "size")
+    @Indexed(name = "size", type = "string")
     private String size;
 
-    @Column(name = "size_id")
+    @Indexed(name = "size_id", type = "string")
     private String sizeId;
 
-    @Column(name = "department_id")
+    @Indexed(name = "department_id", type = "string")
     private String departmentId;
 
-    @Column(name = "dissection_code")
+    @Indexed(name = "dissection_code", type = "string")
     private String dissectionCode;
 
-    @Column(name = "hazmat")
+    @Indexed(name = "hazmat", type = "string")
     private String hazmat;
 
-    @Column(name = "redline")
+    @Indexed(name = "redline", type = "string")
     private String redline;
 
-    @Column(name = "promoted")
+    @Indexed(name = "promoted", type = "string")
     private String promoted;
 
-    @Column(name = "tax_code")
+    @Indexed(name = "tax_code", type = "string")
     private String taxCode;
 
-    @Column(name = "vendor")
+    @Indexed(name = "vendor", type = "string")
     private String vendor;
 
-    @Column(name = "list_price")
+    @Indexed(name = "list_price", type = "double")
     private double listPrice;
 
-    @Column(name = "sale_price")
+    @Indexed(name = "sale_price", type = "double")
     private double salePrice;
 
-    @Column(name = "sale_price_effective_date")
+    @Indexed(name = "sale_price_effective_date", type = "string")
     private String salePriceEffectiveDate;
 
-    @Column(name = "currency")
+    @Indexed(name = "currency", type = "string")
     private String currency;
 
-    @Column(name = "shoprunner_eligible")
+    @Indexed(name = "shoprunner_eligible", type = "string")
     private String shoprunnerEligible;
 
-    @Column(name = "title")
+    @Indexed(name = "title", type = "string")
     private String title;
 
-    @Column(name = "link")
+    @Indexed(name = "link", type = "string")
     private String link;
 
-    @Column(name = "prod_description", length = 65555)
+    @Indexed(name = "prod_description", type = "string")
     private String prodDescription;
 
-    @Column(name = "start_date")
+    @Indexed(name = "start_date", type = "string")
     private String startDate;
 
-    @Column(name = "featured_color")
+    @Indexed(name = "featured_color", type = "string")
     private String featuredColor;
 
-    @Column(name = "featured_color_category")
+    @Indexed(name = "featured_color_category", type = "string")
     private String featuredColorCategory;
 
-    @Column(name = "related_products")
+    @Indexed(name = "related_products", type = "string")
     private String relatedProducts;
 
-    @Column(name = "pre_order")
+    @Indexed(name = "pre_order", type = "string")
     private String preOrder;
 
-    @Column(name = "handling_code")
+    @Indexed(name = "handling_code", type = "string")
     private String handlingCode;
 
-    @Column(name = "video")
+    @Indexed(name = "video", type = "string")
     private String video;
 
-    @Column(name = "proportion")
+    @Indexed(name = "proportion", type = "string")
     private String proportion;
 
-    @Column(name = "proportion_products")
+    @Indexed(name = "proportion_products", type = "string")
     private String proportionProducts;
 
-    @Column(name = "master_style")
+    @Indexed(name = "master_style", type = "string")
     private String masterStyle;
 
-    @Column(name = "cannot_return")
+    @Indexed(name = "cannot_return", type = "string")
     private String cannotReturn;
 
-    @Column(name = "great_find")
+    @Indexed(name = "great_find", type = "string")
     private String greatFind;
 
-    @Column(name = "web_exclusive")
+    @Indexed(name = "web_exclusive", type = "string")
     private String webExclusive;
 
-    @Column(name = "ny_deals")
+    @Indexed(name = "ny_deals", type = "string")
     private String nyDeals;
 
-    @Column(name = "promo_tagline")
+    @Indexed(name = "promo_tagline", type = "string")
     private String promoTagline;
 
-    @Column(name = "partially_promoted")
+    @Indexed(name = "partially_promoted", type = "string")
     private String partiallyPromoted;
 
-    @Column(name = "product_category", length = 65555)
+    @Indexed(name = "product_category", type = "string")
     private String productCategory;
 
-    @Column(name = "sort_order")
+    @Indexed(name = "sort_order", type = "string")
     private String sortOrder;
 
-    @Column(name = "quantity_sold")
+    @Indexed(name = "quantity_sold", type = "int")
     private Integer quantitySold;
 
-    @Column(name = "average_rating")
+    @Indexed(name = "average_rating", type = "double")
     private Double averageRating;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ProductInfo(){
-
-    }
-
     // Getters and setters
+
     public String getSkuId() {
         return skuId;
     }
