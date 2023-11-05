@@ -1,6 +1,6 @@
-package com.example.uploadfilesystem.Service;
+package com.example.productsearchsystem.Service;
 
-import com.example.uploadfilesystem.Entity.Product;
+import com.example.productsearchsystem.Entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,6 +13,7 @@ public interface SolrSearchService {
     Iterable<Product> saveAll(List<Product> products);
 
     void delete(Product product);
+
     Product findBySkuId(Long skuId);
 
     public Page<Product> findByProdDescription(String searchTerm, Pageable pageable);

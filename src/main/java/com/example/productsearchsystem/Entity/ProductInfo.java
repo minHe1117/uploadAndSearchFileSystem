@@ -1,4 +1,4 @@
-package com.example.uploadfilesystem.Entity;
+package com.example.productsearchsystem.Entity;
 
 import org.springframework.data.annotation.Id;
 
@@ -15,7 +15,7 @@ public class ProductInfo {
 
     @Id
     @Column(name = "sku_id")
-    private String skuId;
+    private Long skuId;
 
     @Column(name = "image")
     private String image;
@@ -149,6 +149,10 @@ public class ProductInfo {
     @Column(name = "average_rating")
     private Double averageRating;
 
+    public ProductInfo() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -157,16 +161,12 @@ public class ProductInfo {
         this.id = id;
     }
 
-    public ProductInfo(){
-
-    }
-
     // Getters and setters
-    public String getSkuId() {
+    public Long getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(String skuId) {
+    public void setSkuId(Long skuId) {
         this.skuId = skuId;
     }
 

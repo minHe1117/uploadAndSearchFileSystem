@@ -1,10 +1,10 @@
-package com.example.uploadfilesystem;
+package com.example.productsearchsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UploadFileSystemApplicationTests {
+class ProductSearchSystemTests {
 
     @Test
     void contextLoads() {

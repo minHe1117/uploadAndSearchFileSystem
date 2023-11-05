@@ -1,9 +1,10 @@
-package com.example.uploadfilesystem.Entity;
+package com.example.productsearchsystem.Entity;
 
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -13,7 +14,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Indexed(name = "skuId", type = "string")
-    private String skuId;
+    private Long skuId;
 
     @Indexed(name = "image", type = "string")
     private String image;
@@ -69,9 +70,6 @@ public class Product {
     @Indexed(name = "sale_price", type = "double")
     private double salePrice;
 
-    @Indexed(name = "sale_price_effective_date", type = "string")
-    private String salePriceEffectiveDate;
-
     @Indexed(name = "currency", type = "string")
     private String currency;
 
@@ -86,9 +84,6 @@ public class Product {
 
     @Indexed(name = "prod_description", type = "string")
     private String prodDescription;
-
-    @Indexed(name = "start_date", type = "string")
-    private String startDate;
 
     @Indexed(name = "featured_color", type = "string")
     private String featuredColor;
@@ -149,11 +144,11 @@ public class Product {
 
     // Getters and setters
 
-    public String getSkuId() {
+    public Long getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(String skuId) {
+    public void setSkuId(Long skuId) {
         this.skuId = skuId;
     }
 
@@ -301,14 +296,6 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public String getSalePriceEffectiveDate() {
-        return salePriceEffectiveDate;
-    }
-
-    public void setSalePriceEffectiveDate(String salePriceEffectiveDate) {
-        this.salePriceEffectiveDate = salePriceEffectiveDate;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -347,14 +334,6 @@ public class Product {
 
     public void setProdDescription(String prodDescription) {
         this.prodDescription = prodDescription;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
     }
 
     public String getFeaturedColor() {

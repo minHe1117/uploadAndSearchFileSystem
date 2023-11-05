@@ -1,7 +1,7 @@
-package com.example.uploadfilesystem.Controller;
+package com.example.productsearchsystem.Controller;
 
-import com.example.uploadfilesystem.Entity.Product;
-import com.example.uploadfilesystem.Service.SolrSearchService;
+import com.example.productsearchsystem.Entity.Product;
+import com.example.productsearchsystem.Service.SolrSearchService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @GetMapping("/search/{searchTerm}/{page}/{pageSize}")
-    public List<Product> findOrderBySearchTerm(@PathVariable String searchTerm, @PathVariable int page,@PathVariable int pageSize) {
+    public List<Product> findOrderBySearchTerm(@PathVariable String searchTerm, @PathVariable int page, @PathVariable int pageSize) {
         return solrProductService.findByCustomQuery(searchTerm, PageRequest.of(page, pageSize)).getContent();
     }
 }

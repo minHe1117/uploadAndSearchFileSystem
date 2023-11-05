@@ -1,27 +1,33 @@
-package com.example.uploadfilesystem.Service;
+package com.example.productsearchsystem.Service;
 
-import com.example.uploadfilesystem.Dao.UpLoadRepository;
-import com.example.uploadfilesystem.Entity.ProductInfo;
+import com.example.productsearchsystem.Dao.ProductInfoRepository;
+import com.example.productsearchsystem.Entity.Product;
+import com.example.productsearchsystem.Entity.ProductInfo;
 import com.univocity.parsers.csv.CsvParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 public class ImplUploadFile implements UpLoadFileService {
 
-    UpLoadRepository upLoadRepository;
+    private ProductInfoRepository productInfoRepository;
+
+    private SolrSearchService solrSearchService;
 
     private CsvParser csvParser;
 
-    public ImplUploadFile(UpLoadRepository upLoadRepository, CsvParser csvParser) {
-        this.upLoadRepository = upLoadRepository;
+    public ImplUploadFile(ProductInfoRepository productInfoRepository, CsvParser csvParser, SolrSearchService solrSearchService) {
+        this.productInfoRepository = productInfoRepository;
         this.csvParser = csvParser;
+        this.solrSearchService = solrSearchService;
     }
 
     @Override
@@ -30,16 +36,47 @@ public class ImplUploadFile implements UpLoadFileService {
             throw new Exception("Please upload a non-empty file.");
         }
 
-        List<ProductInfo> productList = new ArrayList<>();
-        long lineNumber = 0;//Used to keep track of the line numbers
+        List<ProductInfo> parsedProductInfos = new ArrayList<>();
+        //Used to keep track of the line numbers
+        long lineNumber = 0;
+
+        parseFile(file, parsedProductInfos, lineNumber);
+
+        List<ProductInfo> newProductInfos = new ArrayList<>();
+        lineNumber = 0;
+        //filter duplicate data by SkuID
+        for (ProductInfo p : parsedProductInfos) {
+            if (this.productInfoRepository.existsById(p.getSkuId())) {
+                System.err.println("Skipping duplicate entry at line " + lineNumber + ":" + p);
+                continue;
+            }
+            newProductInfos.add(p);
+            lineNumber++;
+        }
+
+        try {
+            productInfoRepository.saveAll(newProductInfos);
+        } catch (Exception e) {
+            System.err.println("Error save to DB: " + e.getMessage());
+        }
+
+        try {
+            this.solrSearchService.saveAll(getProducts(newProductInfos));
+        } catch (Exception e) {
+            System.err.println("Error save to Solr : " + e.getMessage());
+        }
+
+        return "Upload file successful，total items: " + lineNumber;
+    }
+
+    private void parseFile(MultipartFile file, List<ProductInfo> parsedProductInfos, long lineNumber) throws IOException {
         try (InputStreamReader fileReader = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)) {
             // Begin parsing the file, which returns a list of Records.
             List<com.univocity.parsers.common.record.Record> records = csvParser.parseAllRecords(fileReader);
             for (com.univocity.parsers.common.record.Record record : records) {
-                lineNumber++; // Increment line number for each record
                 try {
                     ProductInfo item = getProductInfo(record);
-                    productList.add(item);
+                    parsedProductInfos.add(item);
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid sku_id at line " + lineNumber + ": " + e.getMessage());
                 } catch (IllegalArgumentException e) {
@@ -48,19 +85,69 @@ public class ImplUploadFile implements UpLoadFileService {
                     System.err.println("Error processing record at line " + lineNumber + ": " + e.getMessage());
                 }
             }
-
-            if (!productList.isEmpty()) {
-                upLoadRepository.saveAll(productList);
-            }
         } catch (Exception e) {
             System.err.println("Error reading or parsing TSV file: " + e.getMessage());
             throw e;
         }
-
-        return "Upload file successful，total items: " + lineNumber;
     }
 
-    private ProductInfo getProductInfo(com.univocity.parsers.common.record.Record record){
+    private List<Product> getProducts(List<ProductInfo> productInfos) {
+        return productInfos.stream()
+                .map(this::getProduct)
+                .collect(Collectors.toList());
+    }
+
+    private Product getProduct(ProductInfo productInfo) {
+        Product product = new Product();
+
+        product.setSkuId(productInfo.getSkuId());
+        product.setImage(productInfo.getImage());
+        product.setAdditionalImageLink(productInfo.getAdditionalImageLink());
+        product.setStyleId(productInfo.getStyleId());
+        product.setClassId(productInfo.getClassId());
+        product.setColor(productInfo.getColor());
+        product.setColorCode(productInfo.getColorCode());
+        product.setColorFamily(productInfo.getColorFamily());
+        product.setSize(productInfo.getSize());
+        product.setSizeId(productInfo.getSizeId());
+        product.setDepartmentId(productInfo.getDepartmentId());
+        product.setDissectionCode(productInfo.getDissectionCode());
+        product.setHazmat(productInfo.getHazmat());
+        product.setRedline(productInfo.getRedline());
+        product.setPromoted(productInfo.getPromoted());
+        product.setTaxCode(productInfo.getTaxCode());
+        product.setVendor(productInfo.getVendor());
+        product.setListPrice(productInfo.getListPrice());
+        product.setSalePrice(productInfo.getSalePrice());
+        product.setCurrency(productInfo.getCurrency());
+        product.setShoprunnerEligible(productInfo.getShoprunnerEligible());
+        product.setTitle(productInfo.getTitle());
+        product.setLink(productInfo.getLink());
+        product.setProdDescription(productInfo.getProdDescription());
+        product.setFeaturedColor(productInfo.getFeaturedColor());
+        product.setFeaturedColorCategory(productInfo.getFeaturedColorCategory());
+        product.setRelatedProducts(productInfo.getRelatedProducts());
+        product.setPreOrder(productInfo.getPreOrder());
+        product.setHandlingCode(productInfo.getHandlingCode());
+        product.setVideo(productInfo.getVideo());
+        product.setProportion(productInfo.getProportion());
+        product.setProportionProducts(productInfo.getProportionProducts());
+        product.setMasterStyle(productInfo.getMasterStyle());
+        product.setCannotReturn(productInfo.getCannotReturn());
+        product.setGreatFind(productInfo.getGreatFind());
+        product.setWebExclusive(productInfo.getWebExclusive());
+        product.setNyDeals(productInfo.getNyDeals());
+        product.setPromoTagline(productInfo.getPromoTagline());
+        product.setPartiallyPromoted(productInfo.getPartiallyPromoted());
+        product.setProductCategory(productInfo.getProductCategory());
+        product.setSortOrder(productInfo.getSortOrder());
+        product.setQuantitySold(productInfo.getQuantitySold());
+        product.setAverageRating(productInfo.getAverageRating());
+
+        return product;
+    }
+
+    private ProductInfo getProductInfo(com.univocity.parsers.common.record.Record record) {
         // Get values from record
         String skuId = record.getString("sku_id");
         String image = record.getString("image");
@@ -81,12 +168,12 @@ public class ImplUploadFile implements UpLoadFileService {
         String vendor = record.getString("vendor");
 
         double listPrice = 0.0;
-        if(record.getDouble("list_price") != null ){
+        if (record.getDouble("list_price") != null) {
             listPrice = record.getDouble("list_price");
         }
         double salePrice = 0.0;
-        if(record.getDouble("sale_price") != null ){
-             salePrice = record.getDouble("sale_price");
+        if (record.getDouble("sale_price") != null) {
+            salePrice = record.getDouble("sale_price");
         }
 
         String salePriceEffectiveDate = record.getString("sale_price_effective_date");
@@ -114,19 +201,18 @@ public class ImplUploadFile implements UpLoadFileService {
         String productCategory = record.getString("product_category");
         String sortOrder = record.getString("sort_order");
         int quantitySold = 0;
-        if(record.getInt("quantity_sold") != null){
+        if (record.getInt("quantity_sold") != null) {
             record.getInt("quantity_sold");
         }
-
         double averageRating = 0.0;
-        if(record.getDouble("average_rating") != null ){
-             averageRating = record.getDouble("average_rating");
+        if (record.getDouble("average_rating") != null) {
+            averageRating = record.getDouble("average_rating");
         }
 
         // Create ProductInfo
         ProductInfo product = new ProductInfo();
 
-        product.setSkuId(skuId);
+        product.setSkuId(Long.parseLong(skuId));
         product.setImage(image);
         product.setAdditionalImageLink(additionalImageLink);
         product.setStyleId(styleId);
