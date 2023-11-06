@@ -1,4 +1,4 @@
-package com.example.uploadfilesystem.CsvConfig;
+package com.example.productsearchsystem.CsvConfig;
 
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;

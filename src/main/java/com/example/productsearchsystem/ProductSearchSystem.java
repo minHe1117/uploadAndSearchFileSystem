@@ -1,13 +1,13 @@
-package com.example.uploadfilesystem;
+package com.example.productsearchsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UploadFileSystemApplication {
+public class ProductSearchSystem {
 
     public static void main(String[] args) {
-        SpringApplication.run(UploadFileSystemApplication.class, args);
+        SpringApplication.run(ProductSearchSystem.class, args);
     }
 
 }
